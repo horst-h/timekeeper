@@ -100,7 +100,7 @@ button {
     border: none;
 }
 
-#workingHours, #lunchBreak {
+#lunchBreak {
     width: 40px; /* Verkleinert die Breite des Eingabefeldes */
     height: 20px; /* Verkleinert die Höhe des Eingabefeldes */
     font-size: 12px; /* Verwendet eine kleinere Schriftgröße */

@@ -14,7 +14,7 @@ class WorkTime {
     let currentDate = new Date().toISOString().substring(0, 10); // YYYY-MM-DD format
     let adjustedStartTime = new Date(`${currentDate} ${this.startTime}`);
     let adjustedEndTime = this.endTime ? new Date(`${currentDate} ${this.endTime}`) : new Date();
-    console.log(`adjustedEndTime: ${adjustedEndTime}`);
+    // console.log(`adjustedEndTime: ${adjustedEndTime}`);
 
     if (this.lunchBreak === null) {
       let currentHour = new Date().getHours();
@@ -39,38 +39,32 @@ class WorkTime {
       return finalDuration.toISOString().substr(11, 5);
     }
   }
-  // calculate the end time by adding the number of minutes to the start time and return the time in HH:MM format
-  // consider the lunch break if the lunchbrake is null take a default value of 30 minutes
+
   calculateEndTime() {
-    if (!this.startTime) {
-      throw new Error('Error: startTime must not be NULL');
-    }
-
-    let currentDate = new Date().toISOString().substring(0, 10); // YYYY-MM-DD format
-    let adjustedStartTime = new Date(`${currentDate} ${this.startTime}`);
-    let adjustedEndTime = new Date(adjustedStartTime.getTime() + this.workDuration * 60000 + (this.lunchBreak ?? 30) * 60000);
-
-    return adjustedEndTime.toISOString().substr(11, 5);
-  }
-
-  addMinutesToTime() {
     // Zerlege die Startzeit in Stunden und Minuten
     const [hours, minutes] = this.startTime.split(':').map(Number);
-
+    
     // Erstelle ein Date-Objekt (das Datum ist hier nicht wichtig)
     const time = new Date();
     time.setHours(hours, minutes, 0, 0);
+    // console.log(`Start-Timex: ${time.getHours()}:${time.getMinutes()}`);
+    
+    // add the work duration and lunchbreak to the time object
+    let endTime = new Date(time.getTime() + this.workDuration * 60000 + (this.lunchBreak ?? 30) * 60000);
 
-    // Addiere die Minuten
-    time.setMinutes(time.getMinutes() + this.workDuration + (this.lunchBreak ?? 30));
+    // log start and end-time and lunchbreak 
+    // console.log(`Start-Time: ${this.startTime}`);
+    // console.log(`Lunch-Break: ${this.lunchBreak}`);
+    // console.log(`Work-Duration: ${this.workDuration}`);
+    // console.log(`End-Time: ${endTime}`);
+    // console.log(`End-Time: ${endTime.getHours()}:${time.getMinutes()}`);
 
-    // Formatierung der neuen Zeit in "HH:MM"
-    const resultHours = time.getHours().toString().padStart(2, '0');
-    const resultMinutes = time.getMinutes().toString().padStart(2, '0');
+    // return the end time as a string in the format "HH:MM"
+    const resultHours = endTime.getHours().toString().padStart(2, '0');
+    const resultMinutes = endTime.getMinutes().toString().padStart(2, '0');
 
     return `${resultHours}:${resultMinutes}`;
-}
-
+  }
 }
 
 function calculateTimeChunks(timeValue, numChunks) {
@@ -88,32 +82,36 @@ function calculateTimeChunks(timeValue, numChunks) {
 
 
 function displayWorkDuration() {
-  const startTime = '10:00';
+  console.log('updating visual: '+ new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
+  // get instance var from the global variable
+  let workTimeCalculator = window.workTimeCalculator;
+  const startTime = workTimeCalculator.startTime ?? '08:00';
   // lunchbrake in minutes
-  const lunchbrake = 35;
+  const lunchbrake = workTimeCalculator.lunchBreak ?? 30;
   // number of segments in the circle
   const maxChunks = 24;
   // time to work in minutes
-  const workDurationMinutes = 468;
-  const timeChunks = workDurationMinutes / maxChunks;
+  const workDuration = workTimeCalculator.workDuration ?? 480;
+  const timeChunks = workDuration / maxChunks;
   try {
-    let workTimeCalculator = new WorkTime(startTime, null, lunchbrake, workDurationMinutes);
+    // let workTimeCalculator = new WorkTime(startTime, null, lunchbrake, workDuration);
     let workTime = workTimeCalculator.calculateDuration();
     // document.getElementById('output').textContent = workTime;
     let minuteChunks = calculateTimeChunks(workTime, timeChunks);
 
     // calculate the end time
-    let endTime = workTimeCalculator.addMinutesToTime();
-    console.log(`End Time: ${endTime}`);
+    let endTime = workTimeCalculator.calculateEndTime();
+    // console.log(`End Time: ${endTime}`);
 
-    createSegmentedCircle({segments: maxChunks, actualCount: minuteChunks, text: workTime, ringThickness: 10, ringColor: 'green', textAbove: `Start: ${startTime}`, textBelow: `End: ${endTime}`, divId: 'workTimeCircle'});
+    createSegmentedCircle({ segments: maxChunks, actualCount: minuteChunks, text: workTime, ringThickness: 10, ringColor: 'green', textAbove: `Start: ${startTime}`, textBelow: `End: ${endTime}`, divId: 'workTimeCircle' });
 
     // Bruch kürzen
     const result = reduceFraction(minuteChunks, maxChunks);
     console.log(`MinuteChunks: ${minuteChunks} / ${maxChunks} --> ${result.numerator}/${result.denominator}`);
 
   } catch (error) {
-    document.getElementById('output').textContent = error;
+    console.log(error);
+    document.getElementById('errorMsg').textContent = error;
   }
 }
 
@@ -139,9 +137,27 @@ function reduceFraction(numerator, denominator) {
 }
 
 
-window.onload = displayWorkDuration;  // Call the function when the page loads
+window.onload = init();  // Call the function when the page loads
 
+// create a function that is run on load an initializes all global vars
+function init() {
+  // read initial values from local storage if emtpy use default values
+  let startTime = localStorage.getItem('startTime') ?? new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  let workingHours = localStorage.getItem('workingHours');
+  let lunchBreak = localStorage.getItem('lunchBreak');
 
+  // create a new instance of the WorkTime class
+  let workTimeCalculator = new WorkTime(startTime, null, lunchBreak, workingHours);
+  window.workTimeCalculator = workTimeCalculator;
+
+  // if workingHours and/or lunchbreak is not set display the settings menu
+  if (!workingHours || !lunchBreak) {
+    openMenu();
+  } else {
+    // display the work duration
+    displayWorkDuration();
+  }
+}
 
 // Refresh the page every 60 seconds
 setInterval(function () {
@@ -149,5 +165,6 @@ setInterval(function () {
   if (document.getElementById('menu').style.width === '250px') {
     return;
   }
-  window.location.reload();
+  // window.location.reload();
+  displayWorkDuration();
 }, 60000);  // 60000 milliseconds = 1 minute

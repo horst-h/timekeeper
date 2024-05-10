@@ -66,13 +66,14 @@ function createSegmentedCircle({segments, actualCount, text, ringThickness, ring
   }
 
   // Erzeuge den Text in der Mitte des Kreises
+  const fontFamily = 'Roboto';
   const textElement = document.createElementNS(svgNS, 'text');
   textElement.setAttribute('x', centerX);
   textElement.setAttribute('y', centerY);
   // set color of text to grey
   textElement.setAttribute('fill', 'grey');
   // set fontsize to large and font family to sans-serif
-  textElement.setAttribute('font-family', 'roboto');
+  textElement.setAttribute('font-family', fontFamily);
   textElement.setAttribute('font-size', '32');
   textElement.setAttribute('dominant-baseline', 'middle');
   textElement.setAttribute("text-anchor", "middle");
@@ -85,7 +86,7 @@ function createSegmentedCircle({segments, actualCount, text, ringThickness, ring
     textElement2.setAttribute('x', centerX);
     textElement2.setAttribute('y', centerY - 32);
     textElement2.setAttribute('fill', 'grey');
-    textElement2.setAttribute('font-family', 'roboto');
+    textElement2.setAttribute('font-family', fontFamily);
     textElement2.setAttribute('font-size', '12');
     textElement2.setAttribute('dominant-baseline', 'middle');
     textElement2.setAttribute("text-anchor", "middle");
@@ -98,22 +99,18 @@ function createSegmentedCircle({segments, actualCount, text, ringThickness, ring
     textElement3.setAttribute('x', centerX);
     textElement3.setAttribute('y', centerY + 32);
     textElement3.setAttribute('fill', 'grey');
-    textElement3.setAttribute('font-family', 'roboto');
+    textElement3.setAttribute('font-family', fontFamily);
     textElement3.setAttribute('font-size', '12');
     textElement3.setAttribute('dominant-baseline', 'middle');
     textElement3.setAttribute("text-anchor", "middle");
     textElement3.textContent = textBelow;
     svg.appendChild(textElement3);
 
-
-  // Füge das SVG-Element dem HTML-Dokument hinzu
   // check id divId is null or empty if not add the svg to the div with the id
     if (divId && divId !== '') {
-        document.getElementById(divId).appendChild(svg);
+        document.getElementById(divId).innerHTML= svg.outerHTML;
     } else {
         document.body.appendChild(svg);
     }
 }
 
-// Aufruf der Funktion mit 32 Segmenten, dem Text "Hello World" und einer Ringdicke von 20
-// createSegmentedCircle({segments: 24, actualCount: 8, text: '08:42', ringThickness: 10, ringColor: 'green'});

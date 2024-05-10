@@ -6,9 +6,10 @@
     <link rel="icon" href="clock-icon.png" type="image/x-icon" />
     <title>Work Time Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <script src="workTimeCalculator.js"></script>
-    <script src="draw_circle.js"></script>
-    <script src="settings_menu.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <script defer src="draw_circle.js"></script>
+    <script defer src="settings_menu.js"></script>
+    <script defer src="workTimeCalculator.js"></script>
     <link rel="stylesheet" type="text/css" href="css/timekeeper.css" />
   </head>
   <body>
@@ -27,7 +28,7 @@
             <input type="time" id="startTime" name="startTime">
             
             <label class="settingLabel" for="workingHours">Arbeitsstunden:</label>
-            <input type="number" id="workingHours" name="workingHours" placeholder="Stunden">
+            <input type="time" id="workingHours" name="workingHours" placeholder="Stunden">
     
             <label class="settingLabel" for="lunchBreak">Mittagspause (in Minuten):</label>
             <input type="number" id="lunchBreak" name="lunchBreak" placeholder="Minuten">
@@ -44,7 +45,7 @@
       </div>
       <div id="workTimeCircle"></div>
     </div>
-
+    <div id="errorMsg"></div>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         const textElement = document.getElementById('headLineText');
