@@ -41,9 +41,11 @@ function closeMenu() {
         return parseInt(hours) * 60 + parseInt(minutes);
     }
 
+    // store the values in the local storage
     localStorage.setItem('startTime', startTime);
     localStorage.setItem('workDuration', workDuration);
     localStorage.setItem('lunchBreak', lunchBreak);
+    localStorage.setItem('date', getFormattedDate());
 
     // console.log('closeMenu: ', startTime, workDuration, lunchBreak);
 
