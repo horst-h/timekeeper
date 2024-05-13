@@ -1,5 +1,6 @@
 class WorkTime {
-  constructor(startTime, endTime, lunchBreak, workDuration) {
+  constructor(currentDate, startTime, endTime, lunchBreak, workDuration) {
+    this.currentDate = currentDate;
     this.startTime = startTime;
     this.endTime = endTime;
     this.lunchBreak = lunchBreak;
@@ -16,6 +17,7 @@ class WorkTime {
     let adjustedEndTime = this.endTime ? new Date(`${currentDate} ${this.endTime}`) : new Date();
     // console.log(`adjustedEndTime: ${adjustedEndTime}`);
 
+    // TODO: eventuell löschen und Pausen nur nach Eingabe des Benutzers berücksichtigen
     if (this.lunchBreak === null) {
       let currentHour = new Date().getHours();
       this.lunchBreak = currentHour < 12 ? 0 : 30;
@@ -65,8 +67,44 @@ class WorkTime {
 
     return `${resultHours}:${resultMinutes}`;
   }
-}
 
+  // calulate the time difference between the current time and the calculated endTime
+  overTime() {
+    const now = new Date();
+    const currentHours = now.getHours();
+    const currentMinutes = now.getMinutes();
+  
+    const [inputHours, inputMinutes] = this.calculateEndTime().split(':').map(Number);
+  
+    // Berechne neue Zeit
+    let resultHours = currentHours - inputHours;
+    let resultMinutes = currentMinutes - inputMinutes;
+
+    // return if current time is before end time
+    if (resultHours < 0) {
+      return '00:00';
+    }
+  
+    // // TODO: löschen -- Korrigiere Minuten, falls nötig
+    // if (resultMinutes < 0) {
+    //   resultMinutes += 60;
+    //   resultHours -= 1;
+    // }
+  
+    // // Korrigiere Stunden, falls nötig
+    // if (resultHours < 0) {
+    //   resultHours += 24;
+    // }
+  
+    // Führe Nullen hinzu, falls nötig
+    const formattedHours = resultHours.toString().padStart(2, '0');
+    const formattedMinutes = resultMinutes.toString().padStart(2, '0');
+  
+    return `${formattedHours}:${formattedMinutes}`;
+  }
+} // end of class WorkTime
+
+// get the minute chunks for the work duration based on the total number of chunks (circle segments)
 function calculateTimeChunks(timeValue, numChunks) {
   // Split the timeValue (expected format "HH:MM") into hours and minutes
   const [hours, minutes] = timeValue.split(':').map(Number);
@@ -83,9 +121,17 @@ function calculateTimeChunks(timeValue, numChunks) {
 
 // this is the main routine that does all the calculations and displays the work duration
 function displayWorkDuration() {
-  console.log('updating visual: '+ new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
+  // console.log('updating visual: '+ new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
   // get instance var from the global variable
   let workTimeCalculator = window.workTimeCalculator;
+
+  // first check if we still are in the same day if not show the settings menu
+  let currentDate = getFormattedDate();
+  if (workTimeCalculator.currentDate !== currentDate) {
+    openMenu();
+    return;
+  }
+
   const startTime = workTimeCalculator.startTime ?? '08:00';
   // lunchbrake in minutes
   const lunchbrake = workTimeCalculator.lunchBreak ?? 30;
@@ -95,31 +141,25 @@ function displayWorkDuration() {
   const workDuration = workTimeCalculator.workDuration ?? 480;
   const timeChunks = workDuration / maxChunks;
   try {
-    // let workTimeCalculator = new WorkTime(startTime, null, lunchbrake, workDuration);
     let workTime = workTimeCalculator.calculateDuration();
-    // document.getElementById('output').textContent = workTime;
     let minuteChunks = calculateTimeChunks(workTime, timeChunks);
 
     // calculate the end time
     let endTime = workTimeCalculator.calculateEndTime();
-    // console.log(`End Time: ${endTime}`);
+    // workTimeCalculator.endTime = endTime;
 
     // prepare the text for the overtime circle
     let textAbove = `Start: ${startTime}`;
     let textBelow = `End: ${endTime}`;
     
-
-    // check if we already are past the end time and in overtime
-    let currentTime = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-    if (currentTime > endTime) {
-      // console.log('Overtime');
-      // calculate the overtime
-      let overtime = new Date(new Date() - new Date(endTime));
-      // console.log(`Overtime: ${overtime.toISOString().substr(11, 5)}`);
-      // create the text for the overtime circle
-      textBelow = `Overtime: ${overtime.toISOString().substr(11, 5)}`;
+    // check for overtime
+    console.log('End Time: ' + workTimeCalculator.endTime);
+    let overtime = workTimeCalculator.overTime();
+    if (overtime !== '00:00') {
+      textBelow = `Overtime: ${overtime}`;
     }
 
+    // call the main drawing routine for the worktime circle
     createSegmentedCircle({ segments: maxChunks, actualCount: minuteChunks, text: workTime, ringThickness: 10, ringColor: 'green', textAbove: textAbove, textBelow: textBelow, divId: 'workTimeCircle' });
 
     // Bruch kürzen
@@ -153,6 +193,11 @@ function reduceFraction(numerator, denominator) {
   };
 }
 
+// write a function that returns a string with the formated date "YYYY-MM-DD"
+function getFormattedDate() {
+  return new Date().toISOString().substring(0, 10); // YYYY-MM-DD format
+}
+
 
 window.onload = init();  // Call the function when the page loads
 
@@ -162,15 +207,17 @@ function init() {
   let startTime = localStorage.getItem('startTime') ?? new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
   let workingHours = localStorage.getItem('workingHours');
   let lunchBreak = localStorage.getItem('lunchBreak');
-
-  // TODO check if the current date is the actual date if not show the settings menu
-
+  let storedDate = localStorage.getItem('date');
+  
+  // get the current date is the actual date if not show the settings menu in the if clause below
+  let currentDate = getFormattedDate();
+  
   // create a new instance of the WorkTime class
-  let workTimeCalculator = new WorkTime(startTime, null, lunchBreak, workingHours);
+  let workTimeCalculator = new WorkTime(currentDate, startTime, null, lunchBreak, workingHours);
   window.workTimeCalculator = workTimeCalculator;
 
   // if workingHours and/or lunchbreak is not set display the settings menu
-  if (!workingHours || !lunchBreak) {
+  if (!workingHours || !lunchBreak || storedDate !== currentDate) {
     openMenu();
   } else {
     // display the work duration
