@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="clock-icon.png" type="image/x-icon" />
-    <title>Work Time Calculator</title>
+    <title>Work Time Clock</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <script defer src="draw_circle.js"></script>
@@ -23,14 +23,14 @@
     </div>
     <hr>
         <form id="timeForm">
-            <label class="settingLabel" for="startTime">Startzeit:</label>
+            <label class="settingLabel" for="startTime">Starttime:</label>
 
             <input type="time" id="startTime" name="startTime">
             
-            <label class="settingLabel" for="workingHours">Arbeitsstunden:</label>
+            <label class="settingLabel" for="workingHours">Working Hours:</label>
             <input type="time" id="workingHours" name="workingHours" placeholder="Stunden">
     
-            <label class="settingLabel" for="lunchBreak">Mittagspause (in Minuten):</label>
+            <label class="settingLabel" for="lunchBreak">Breaks (minutes):</label>
             <input type="number" id="lunchBreak" name="lunchBreak" placeholder="Minuten">
         </form>
     </div>
@@ -52,10 +52,10 @@
         const text = textElement.textContent;
         let styledText = '';
 
-        // Durchlaufe jeden Buchstaben im Text
+        // loop through text and wrap uppercase letters in a span tag
         for (let i = 0; i < text.length; i++) {
           const char = text[i];
-          // Überprüfe, ob der Buchstabe ein Großbuchstabe ist
+          // check if the character is an uppercase letter
           if (char === char.toUpperCase() && char !== char.toLowerCase()) {
             // Umhülle den Großbuchstaben mit einem Span-Tag und wende eine Klasse an
             styledText += `<span class="larger">${char}</span>`;
@@ -63,7 +63,7 @@
             styledText += char;
           }
         }
-        // Ersetze den ursprünglichen Text mit dem neuen gestylten Text
+        // change the text in the element
         textElement.innerHTML = styledText;
       });
     </script>

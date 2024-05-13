@@ -1,4 +1,13 @@
-function createSegmentedCircle({ segments, actualCount, text, ringThickness, ringColor, textAbove, textBelow, divId }) {
+function createSegmentedCircle({
+  segments,
+  actualCount,
+  text,
+  ringThickness,
+  ringColor,
+  textAbove,
+  textBelow,
+  divId,
+}) {
   const svgNS = 'http://www.w3.org/2000/svg';
   const width = 200; // Breite und Höhe des SVG
   const height = 200;
@@ -7,6 +16,16 @@ function createSegmentedCircle({ segments, actualCount, text, ringThickness, rin
   const outerRadius = 90; // Außenradius des Rings
   const innerRadius = outerRadius - ringThickness; // Innenradius des Rings
   const gap = 0.04; // Lückenbreite als Bruchteil des Gesamtwinkels
+
+  // TODO get the colors for the rings from css
+
+//   const root = document.documentElement; // root element of the document <html>
+//   const primaryColor = getComputedStyle(root)
+//     .getPropertyValue('--primary-color')
+//     .trim();
+//   const secondaryColor = getComputedStyle(root)
+//     .getPropertyValue('--secondary-color')
+//     .trim();
 
   // Erstelle ein SVG-Element
   const svg = document.createElementNS(svgNS, 'svg');
@@ -65,12 +84,12 @@ function createSegmentedCircle({ segments, actualCount, text, ringThickness, rin
     svg.appendChild(path);
   }
   // Draw the overtime circle
-// Prüfe, ob ein zweiter Ring gezeichnet werden muss
-if (actualCount > segments) {
-  let extraSegments = actualCount - segments;
-  const smallerOuterRadius = outerRadius - 13;  // Kleinerer äußerer Radius für den zweiten Ring
-  const smallerInnerRadius = innerRadius - 13;  // Kleinerer innerer Radius für den zweiten Ring
-  for (let j = 0; j < extraSegments; j++) {
+  // Prüfe, ob ein zweiter Ring gezeichnet werden muss
+  if (actualCount > segments) {
+    let extraSegments = actualCount - segments;
+    const smallerOuterRadius = outerRadius - 13; // Kleinerer äußerer Radius für den zweiten Ring
+    const smallerInnerRadius = innerRadius - 13; // Kleinerer innerer Radius für den zweiten Ring
+    for (let j = 0; j < extraSegments; j++) {
       const angle = (2 * Math.PI) / segments;
       const startAngle = j * angle - Math.PI / 2 + gap / 2;
       const endAngle = (j + 1) * angle - Math.PI / 2 - gap / 2;
@@ -90,17 +109,37 @@ if (actualCount > segments) {
       const path = document.createElementNS(svgNS, 'path');
       const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
       const d = [
-        'M', outerStartX, outerStartY, 'A', smallerOuterRadius, smallerOuterRadius, 0, largeArcFlag, 1, outerEndX, outerEndY,
-        'L', innerStartX, innerStartY, 'A', smallerInnerRadius, smallerInnerRadius, 0, largeArcFlag, 0, innerEndX, innerEndY,
-        'Z'
+        'M',
+        outerStartX,
+        outerStartY,
+        'A',
+        smallerOuterRadius,
+        smallerOuterRadius,
+        0,
+        largeArcFlag,
+        1,
+        outerEndX,
+        outerEndY,
+        'L',
+        innerStartX,
+        innerStartY,
+        'A',
+        smallerInnerRadius,
+        smallerInnerRadius,
+        0,
+        largeArcFlag,
+        0,
+        innerEndX,
+        innerEndY,
+        'Z',
       ].join(' ');
       path.setAttribute('d', d);
-      path.setAttribute('fill', 'lightblue');  // Blaue Farbe für den zweiten Ring
+      path.setAttribute('fill', 'lightblue'); // Blaue Farbe für den zweiten Ring
       svg.appendChild(path);
+    }
   }
-}
 
-  // Erzeuge den Text in der Mitte des Kreises
+  // TODO refactor the code and create a function to create the text
   const fontFamily = 'Roboto';
   const textElement = document.createElementNS(svgNS, 'text');
   textElement.setAttribute('x', centerX);
@@ -111,7 +150,7 @@ if (actualCount > segments) {
   textElement.setAttribute('font-family', fontFamily);
   textElement.setAttribute('font-size', '32');
   textElement.setAttribute('dominant-baseline', 'middle');
-  textElement.setAttribute("text-anchor", "middle");
+  textElement.setAttribute('text-anchor', 'middle');
   textElement.textContent = text;
   svg.appendChild(textElement);
 
@@ -124,7 +163,7 @@ if (actualCount > segments) {
   textElement2.setAttribute('font-family', fontFamily);
   textElement2.setAttribute('font-size', '12');
   textElement2.setAttribute('dominant-baseline', 'middle');
-  textElement2.setAttribute("text-anchor", "middle");
+  textElement2.setAttribute('text-anchor', 'middle');
   textElement2.textContent = textAbove;
   svg.appendChild(textElement2);
 
@@ -137,7 +176,7 @@ if (actualCount > segments) {
   textElement3.setAttribute('font-family', fontFamily);
   textElement3.setAttribute('font-size', '12');
   textElement3.setAttribute('dominant-baseline', 'middle');
-  textElement3.setAttribute("text-anchor", "middle");
+  textElement3.setAttribute('text-anchor', 'middle');
   textElement3.textContent = textBelow;
   svg.appendChild(textElement3);
 
@@ -150,4 +189,3 @@ if (actualCount > segments) {
     document.body.appendChild(svg);
   }
 }
-

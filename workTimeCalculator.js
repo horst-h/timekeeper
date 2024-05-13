@@ -81,6 +81,7 @@ function calculateTimeChunks(timeValue, numChunks) {
 }
 
 
+// this is the main routine that does all the calculations and displays the work duration
 function displayWorkDuration() {
   console.log('updating visual: '+ new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
   // get instance var from the global variable
@@ -103,7 +104,23 @@ function displayWorkDuration() {
     let endTime = workTimeCalculator.calculateEndTime();
     // console.log(`End Time: ${endTime}`);
 
-    createSegmentedCircle({ segments: maxChunks, actualCount: minuteChunks, text: workTime, ringThickness: 10, ringColor: 'green', textAbove: `Start: ${startTime}`, textBelow: `End: ${endTime}`, divId: 'workTimeCircle' });
+    // prepare the text for the overtime circle
+    let textAbove = `Start: ${startTime}`;
+    let textBelow = `End: ${endTime}`;
+    
+
+    // check if we already are past the end time and in overtime
+    let currentTime = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    if (currentTime > endTime) {
+      // console.log('Overtime');
+      // calculate the overtime
+      let overtime = new Date(new Date() - new Date(endTime));
+      // console.log(`Overtime: ${overtime.toISOString().substr(11, 5)}`);
+      // create the text for the overtime circle
+      textBelow = `Overtime: ${overtime.toISOString().substr(11, 5)}`;
+    }
+
+    createSegmentedCircle({ segments: maxChunks, actualCount: minuteChunks, text: workTime, ringThickness: 10, ringColor: 'green', textAbove: textAbove, textBelow: textBelow, divId: 'workTimeCircle' });
 
     // Bruch kürzen
     const result = reduceFraction(minuteChunks, maxChunks);
@@ -145,6 +162,8 @@ function init() {
   let startTime = localStorage.getItem('startTime') ?? new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
   let workingHours = localStorage.getItem('workingHours');
   let lunchBreak = localStorage.getItem('lunchBreak');
+
+  // TODO check if the current date is the actual date if not show the settings menu
 
   // create a new instance of the WorkTime class
   let workTimeCalculator = new WorkTime(startTime, null, lunchBreak, workingHours);
