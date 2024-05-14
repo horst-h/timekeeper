@@ -52,12 +52,16 @@
         const text = textElement.textContent;
         let styledText = '';
 
+        // this code will run when the DOM is loaded and will wrap the text in the element with an 
+        // id of 'headLineText' and format each capital letter to be displayed larger than the 
+        // rest of the text
+
         // loop through text and wrap uppercase letters in a span tag
         for (let i = 0; i < text.length; i++) {
           const char = text[i];
           // check if the character is an uppercase letter
           if (char === char.toUpperCase() && char !== char.toLowerCase()) {
-            // Umhülle den Großbuchstaben mit einem Span-Tag und wende eine Klasse an
+            // wrap the character in a span tag with a class of 'larger'
             styledText += `<span class="larger">${char}</span>`;
           } else {
             styledText += char;

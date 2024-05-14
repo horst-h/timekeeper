@@ -96,7 +96,7 @@ class WorkTime {
     //   resultHours += 24;
     // }
   
-    // Führe Nullen hinzu, falls nötig
+    // add trailing zeros to hours and minutes
     const formattedHours = resultHours.toString().padStart(2, '0');
     const formattedMinutes = resultMinutes.toString().padStart(2, '0');
   
