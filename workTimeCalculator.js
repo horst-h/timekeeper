@@ -76,25 +76,22 @@ class WorkTime {
   
     const [inputHours, inputMinutes] = this.calculateEndTime().split(':').map(Number);
   
-    // Berechne neue Zeit
+    // get the difference between the current time and the calculated end time
     let resultHours = currentHours - inputHours;
     let resultMinutes = currentMinutes - inputMinutes;
+
+    // if overtime minutes are negative subtract one hour and add 60 minutes
+    if (resultMinutes < 0) {
+      resultHours--;
+      resultMinutes += 60;
+    }
+    console.log(`Current Overtime: ${resultHours}:${resultMinutes}`);
+    
 
     // return if current time is before end time
     if (resultHours < 0) {
       return '00:00';
     }
-  
-    // // TODO: löschen -- Korrigiere Minuten, falls nötig
-    // if (resultMinutes < 0) {
-    //   resultMinutes += 60;
-    //   resultHours -= 1;
-    // }
-  
-    // // Korrigiere Stunden, falls nötig
-    // if (resultHours < 0) {
-    //   resultHours += 24;
-    // }
   
     // add trailing zeros to hours and minutes
     const formattedHours = resultHours.toString().padStart(2, '0');
@@ -143,6 +140,7 @@ function displayWorkDuration() {
   try {
     let workTime = workTimeCalculator.calculateDuration();
     let minuteChunks = calculateTimeChunks(workTime, timeChunks);
+    console.log(`One Segment is ${timeChunks} Min.`);
 
     // calculate the end time
     let endTime = workTimeCalculator.calculateEndTime();
@@ -153,7 +151,7 @@ function displayWorkDuration() {
     let textBelow = `End: ${endTime}`;
     
     // check for overtime
-    console.log('End Time: ' + workTimeCalculator.endTime);
+    // console.log('End Time: ' + workTimeCalculator.endTime);
     let overtime = workTimeCalculator.overTime();
     if (overtime !== '00:00') {
       textBelow = `Overtime: ${overtime}`;

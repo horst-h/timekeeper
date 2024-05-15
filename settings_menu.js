@@ -56,6 +56,7 @@ function closeMenu() {
     workTimeCalculator.startTime = startTime;
     workTimeCalculator.workDuration = workDuration;
     workTimeCalculator.lunchBreak = lunchBreak;
+    workTimeCalculator.currentDate = getFormattedDate();
 
     // update the worktime clock
     displayWorkDuration();    
