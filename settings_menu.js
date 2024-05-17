@@ -2,7 +2,7 @@ function openMenu() {
     // read the values from the local storage
     const startTime = localStorage.getItem('startTime') ?? new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     const workDuration = localStorage.getItem('workDuration') ?? 480;
-    const lunchBreak = localStorage.getItem('lunchBreak') ?? '30';
+    const lunchBreak = localStorage.getItem('lunchBreak') ?? '0';
 
     document.getElementById("menu").style.width = "250px";
 

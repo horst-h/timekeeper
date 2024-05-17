@@ -85,13 +85,13 @@ class WorkTime {
       resultHours--;
       resultMinutes += 60;
     }
-    console.log(`Current Overtime: ${resultHours}:${resultMinutes}`);
     
-
+    
     // return if current time is before end time
     if (resultHours < 0) {
       return '00:00';
     }
+    console.log(`Current Overtime: ${resultHours}:${resultMinutes}`);
   
     // add trailing zeros to hours and minutes
     const formattedHours = resultHours.toString().padStart(2, '0');
@@ -125,6 +125,8 @@ function displayWorkDuration() {
   // first check if we still are in the same day if not show the settings menu
   let currentDate = getFormattedDate();
   if (workTimeCalculator.currentDate !== currentDate) {
+    // reset all relevant values and show the settings menu
+    resetWorkDay();
     openMenu();
     return;
   }
@@ -158,7 +160,7 @@ function displayWorkDuration() {
     }
 
     // call the main drawing routine for the worktime circle
-    createSegmentedCircle({ segments: maxChunks, actualCount: minuteChunks, text: workTime, ringThickness: 10, ringColor: 'green', textAbove: textAbove, textBelow: textBelow, divId: 'workTimeCircle' });
+    createSegmentedCircle({ segments: maxChunks, actualCount: minuteChunks, text: workTime, ringThickness: 10, textAbove: textAbove, textBelow: textBelow, divId: 'workTimeCircle' });
 
     // Bruch kürzen
     const result = reduceFraction(minuteChunks, maxChunks);
@@ -199,6 +201,15 @@ function getFormattedDate() {
 
 window.onload = init();  // Call the function when the page loads
 
+// global vars in the namespace
+const globals = {
+  // get colors from css variables
+  ringBaseColor: getComputedStyle(document.documentElement).getPropertyValue('--ring-base-color').trim() ?? 'lightgrey',
+  ringPrimaryColor: getComputedStyle(document.documentElement).getPropertyValue('--ring-primary-color').trim() ?? 'green',
+  ringSecondaryColor: getComputedStyle(document.documentElement).getPropertyValue('--ring-secondary-color').trim() ?? 'lightblue',
+};
+
+
 // create a function that is run on load an initializes all global vars
 function init() {
   // read initial values from local storage if emtpy use default values
@@ -221,6 +232,14 @@ function init() {
     // display the work duration
     displayWorkDuration();
   }
+}
+
+function resetWorkDay() {
+  // reset all relevant values
+  localStorage.removeItem('lunchBreak');
+  // get the current date
+  let currentDate = getFormattedDate();
+  window.workTimeCalculator.currentDate = currentDate;
 }
 
 // Refresh the page every 60 seconds

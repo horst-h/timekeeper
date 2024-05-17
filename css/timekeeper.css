@@ -1,5 +1,12 @@
+/* set the root values fot the ring colors */
+:root {
+    --ring-base-color: lightgrey;
+    --ring-primary-color: green;
+    --ring-secondary-color: lightblue;
+  }
+
 .larger {
-    font-size: 150%; /* Großbuchstaben 150% größer als der Basistext */
+    font-size: 150%; /* 150% larger than base text size */
 }
 /* set default font for document body to roboto */
 body {
