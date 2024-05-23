@@ -5,6 +5,7 @@ function createSegmentedCircle({
   ringThickness,
   textAbove,
   textBelow,
+  textBelow2, // 
   divId,
 }) {
   const svgNS = 'http://www.w3.org/2000/svg';
@@ -117,7 +118,12 @@ function createSegmentedCircle({
   createTextElement(svg, textAbove, centerX, centerY, '12', -32);
   
   // Smaller text below
-  createTextElement(svg, textBelow, centerX, centerY, '12', 30);
+  // check if text below contains a linebreak and split it into two lines
+  const textBelowLines = textBelow.split('\n');
+  // loop throug array and add an offest to the y position
+  textBelowLines.forEach((line, index) => {
+    createTextElement(svg, line, centerX, centerY, '12', 30 + index * 14);
+  });
 
   // check id divId is null or empty if not add the svg to the div with the id
   if (divId && divId !== '') {
