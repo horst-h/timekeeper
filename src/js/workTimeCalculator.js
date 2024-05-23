@@ -49,6 +49,36 @@ class WorkTime {
     }
   }
 
+  // calculatethe amout of time until the end of the workday
+  timeToGo() {
+    // get the current time
+    let currentTime = new Date();
+
+    // get the end time
+    const [nendHours, endMinutes] = this.calculateEndTime().split(':').map(Number);
+    let endTime = new Date(currentTime.getTime());
+    endTime.setHours(nendHours, endMinutes, 0, 0);
+
+    // Calculate the difference in milliseconds
+    let differenceInMilliseconds = endTime.getTime() - currentTime.getTime();
+
+    // Handling negative differences (if end time is before current time)
+    if (differenceInMilliseconds < 0) {
+        // return 0 if the end time is before the current time
+        return '00:00';
+    }
+
+    // Convert milliseconds to minutes and hours
+    let differenceInMinutes = Math.round(differenceInMilliseconds / (1000 * 60));
+    let hours = Math.floor(differenceInMinutes / 60);
+    let minutes = differenceInMinutes % 60;
+
+    // Format the time difference to HH:MM
+    let formattedDifference = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    return formattedDifference;
+  }
+
+
   calculateEndTime() {
     // Zerlege die Startzeit in Stunden und Minuten
     const [hours, minutes] = this.startTime.split(':').map(Number);
@@ -56,7 +86,6 @@ class WorkTime {
     // Erstelle ein Date-Objekt (das Datum ist hier nicht wichtig)
     const time = new Date();
     time.setHours(hours, minutes, 0, 0);
-    // console.log(`Start-Timex: ${time.getHours()}:${time.getMinutes()}`);
     
     // add the work duration and lunchbreak to the time object
     let endTime = new Date(time.getTime() + this.workDuration * 60000 + (this.lunchBreak ?? 30) * 60000);
@@ -98,12 +127,12 @@ class WorkTime {
     if (resultHours < 0) {
       return '00:00';
     }
-    console.log(`Current Overtime: ${resultHours}:${resultMinutes}`);
-  
+    
     // add trailing zeros to hours and minutes
     const formattedHours = resultHours.toString().padStart(2, '0');
     const formattedMinutes = resultMinutes.toString().padStart(2, '0');
-  
+    console.log(`Current Overtime: ${formattedHours}:${formattedMinutes}`);
+    
     return `${formattedHours}:${formattedMinutes}`;
   }
 } // end of class WorkTime
@@ -159,6 +188,10 @@ function displayWorkDuration() {
     let endTime = workTimeCalculator.calculateEndTime();
     // workTimeCalculator.endTime = endTime;
 
+    // caculate the time to go
+    let timeToGo = workTimeCalculator.timeToGo();
+    console.log(`Time to go: ${timeToGo}`);
+
     // prepare the text for the overtime circle
     let textAbove = `Start: ${startTime}`;
     let textBelow = `End: ${endTime}`;
@@ -170,7 +203,7 @@ function displayWorkDuration() {
       textBelow = `Overtime: ${overtime}`;
     }
 
-    // TODO: show the breaktime in a additional text below if set
+    // show the breaktime in a additional text below if set
     if (lunchbrake > 0) {
        textBelow += `\nBreak: ${lunchbrake} Min.`;  
     }
@@ -178,7 +211,8 @@ function displayWorkDuration() {
     // call the main drawing routine for the worktime circle
     createSegmentedCircle({ segments: maxChunks, actualCount: minuteChunks, text: workTime, ringThickness: 10, textAbove: textAbove, textBelow: textBelow, divId: 'workTimeCircle' });
 
-    // Bruch kürzen
+    // reduce the fraction of the minuteChunks and maxChunks
+    // this is only for logging purposes
     const result = reduceFraction(minuteChunks, maxChunks);
     console.log(`MinuteChunks: ${minuteChunks} / ${maxChunks} --> ${result.numerator}/${result.denominator}`);
 
