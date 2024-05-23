@@ -35,7 +35,7 @@ class WorkTime {
     if (durationInSeconds < 0) {
       return '00:00';
     }
-    
+
     // TIME maximum and minimum in seconds
     let maxTimeInSeconds = 3020399; // 838 hours, 59 minutes, 59 seconds
     let minTimeInSeconds = -3020399;
@@ -146,6 +146,10 @@ function displayWorkDuration() {
   // time to work in minutes
   const workDuration = workTimeCalculator.workDuration ?? 480;
   const timeChunks = workDuration / maxChunks;
+  
+  // TODO: clear error message if it is set
+  document.getElementById('errorMsg').textContent = '';
+
   try {
     let workTime = workTimeCalculator.calculateDuration();
     let minuteChunks = calculateTimeChunks(workTime, timeChunks);
@@ -164,6 +168,11 @@ function displayWorkDuration() {
     let overtime = workTimeCalculator.overTime();
     if (overtime !== '00:00') {
       textBelow = `Overtime: ${overtime}`;
+    }
+
+    // TODO: show the breaktime in a additional text below if set
+    if (lunchbrake > 0) {
+       textBelow += `\nBreak: ${lunchbrake} Min.`;  
     }
 
     // call the main drawing routine for the worktime circle
