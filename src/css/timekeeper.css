@@ -3,11 +3,13 @@
     --ring-base-color: lightgrey;
     --ring-primary-color: green;
     --ring-secondary-color: lightblue;
-  }
+}
 
 .larger {
-    font-size: 150%; /* 150% larger than base text size */
+    font-size: 150%;
+    /* 150% larger than base text size */
 }
+
 /* set default font for document body to roboto */
 body {
     font-family: 'Roboto', sans-serif;
@@ -19,6 +21,7 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
+
 td {
     padding: 5px;
 }
@@ -36,6 +39,7 @@ td {
     height: 250px;
     width: 200px;
 }
+
 /* center everything inside the div workTimeCanvas */
 #workTimeCanvas {
     display: flex;
@@ -56,12 +60,13 @@ td {
     font-size: small;
     font-weight: normal;
 }
+
 .detailsValue {
     font-size: small;
     font-weight: bold;
 }
 
-.closeButton{
+.closeButton {
     /* remove all default styles */
     padding-left: 40px;
     background: none;
@@ -79,8 +84,10 @@ td {
     flex-shrink: 0;
     padding-left: 30px;
 }
+
 #details.open {
-    width: 200px; /* Hier kannst du die Breite anpassen */
+    width: 200px;
+    /* Hier kannst du die Breite anpassen */
 }
 
 .headingLabel {
@@ -94,9 +101,10 @@ td {
 .full-size-p {
     width: 100%;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
-    margin: 0; /* Removes default margin */
+    margin: 0;
+    /* Removes default margin */
     padding: 0;
     padding-top: 20px;
 }
@@ -122,7 +130,8 @@ td {
 
 .menu {
     height: 300px;
-    width: 0; /* Start width to hide the menu initially */
+    width: 0;
+    /* Start width to hide the menu initially */
     position: fixed;
     z-index: 1;
     top: 0;
@@ -130,12 +139,14 @@ td {
     /* set background color to color of body */
     background-color: white;
     overflow-x: hidden;
-    transition: 0.5s; /* Animation for sliding in and out */
+    transition: 0.5s;
+    /* Animation for sliding in and out */
     padding-top: 20px;
     color: white;
 }
 
-.menu input, .menu label {
+.menu input,
+.menu label {
     display: block;
     margin: 10px;
 }
@@ -157,9 +168,11 @@ td {
 }
 
 .settingHeadline::first-letter {
-    font-size: 150%;  /* Macht den ersten Buchstaben doppelt so groß */    
+    font-size: 150%;
+    /* Macht den ersten Buchstaben doppelt so groß */
     color: grey;
 }
+
 .settingLabel {
     color: darkslategrey;
     font-size: 18px;
@@ -173,13 +186,22 @@ button {
 
 
 #lunchBreak {
-    width: 40px; /* Verkleinert die Breite des Eingabefeldes */
-    height: 20px; /* Verkleinert die Höhe des Eingabefeldes */
-    font-size: 12px; /* Verwendet eine kleinere Schriftgröße */
-    padding: 2px 5px; /* Reduziert das Innenpolster, um das Eingabefeld schlanker zu machen */
-    border: 1px solid #ccc; /* Fügt eine feine Umrandung hinzu, passend zum kleineren Design */
+    width: 40px;
+    /* Verkleinert die Breite des Eingabefeldes */
+    height: 20px;
+    /* Verkleinert die Höhe des Eingabefeldes */
+    font-size: 12px;
+    /* Verwendet eine kleinere Schriftgröße */
+    padding: 2px 5px;
+    /* Reduziert das Innenpolster, um das Eingabefeld schlanker zu machen */
+    border: 1px solid #ccc;
+    /* Fügt eine feine Umrandung hinzu, passend zum kleineren Design */
 }
 
-
-
-
+@media (max-width: 500px) {
+    #workTimeContainer {
+        flex-direction: column;
+        /* Change layout to column when screen width is 600px or less */
+        align-items: center;
+    }
+}
