@@ -1,75 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="icons/clock-icon.png" type="image/x-icon" />
-    <title>Work Time Clock</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-    <script defer src="js/draw_circle.js"></script>
-    <script defer src="js/settings_menu.js"></script>
-    <script defer src="js/workTimeCalculator.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/timekeeper.css" />
-  </head>
-  <body>
 
-    <div id="menu" class="menu">
-        <div class="menuHeader">
-            <label class="settingHeadline">Settings</label>
-        <button onclick="closeMenu()" class="closeButton">
-            <i class="fa-solid fa-light fa-download fa-2x"></i>
-        </button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="icons/clock-icon.png" type="image/x-icon" />
+  <title>Work Time Clock</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <script defer src="js/draw_circle.js"></script>
+  <script defer src="js/settings_menu.js"></script>
+  <script defer src="js/workTimeCalculator.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/timekeeper.css" />
+</head>
+
+<body>
+
+  <div id="menu" class="menu">
+    <div class="menuHeader">
+      <label class="settingHeadline">Settings</label>
+      <button onclick="closeMenu()" class="closeButton">
+        <i class="fa-solid fa-light fa-download fa-2x"></i>
+      </button>
     </div>
     <hr>
-        <form id="timeForm">
-            <label class="settingLabel" for="startTime">Starttime:</label>
+    <form id="timeForm">
+      <label class="settingLabel" for="startTime">Starttime:</label>
 
-            <input type="time" id="startTime" name="startTime">
-            
-            <label class="settingLabel" for="workingHours">Working Hours:</label>
-            <input type="time" id="workingHours" name="workingHours" placeholder="Stunden">
-    
-            <label class="settingLabel" for="lunchBreak">Breaks (minutes):</label>
-            <input type="number" id="lunchBreak" name="lunchBreak" placeholder="Minuten">
-        </form>
-    </div>
-    <div id="workTimeCanvas">
-      <div class="headline"><p >    
+      <input type="time" id="startTime" name="startTime">
+
+      <label class="settingLabel" for="workingHours">Working Hours:</label>
+      <input type="time" id="workingHours" name="workingHours" placeholder="Stunden">
+
+      <label class="settingLabel" for="lunchBreak">Breaks (minutes):</label>
+      <input type="number" id="lunchBreak" name="lunchBreak" placeholder="Minuten">
+    </form>
+  </div>
+  <div id="workTimeCanvas">
+    <div>
+      <div class="headline">
+        <p>
         <div class="hamburger" onclick="openMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
         <span id="headLineText">WorkTimeClock</span></p>
       </div>
-      <div id="workTimeCircle"></div>
+      <div id="workTimeContainer">
+        <div id="workTimeCircle"></div>
+        <div id="details">
+          <p class="full-size-p">
+            <span class="headingLabel">Details</span>
+            <button onclick="toggleDetails()" class="closeButton">
+              <i class="fa-solid fa-light fa-times fa-2x close-icon"></i>
+            </button>
+          </p>
+          <table>
+            <tr>
+                <td class="detailsLabel">Current time</td>
+                <td class="detailsValue" id="detailsTimeValue">...</td>
+            </tr>
+            <tr>
+                <td class="detailsLabel">Remaining worktime</td>
+                <td class="detailsValue" id="detailsTime2Go">...</td>
+            </tr>
+            <tr>
+                <td class="detailsLabel">Workday fraction</td>
+                <td class="detailsValue" id="detailsTimeFraction">...</td>
+            </tr>
+            <tr>
+                <td class="detailsLabel">Minutes per segment</td>
+                <td class="detailsValue" id="detailsMinutesPerSegment">...</td>
+            </tr>
+        </table>
+        </div>
+      </div>
     </div>
-    <div id="errorMsg"></div>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const textElement = document.getElementById('headLineText');
-        const text = textElement.textContent;
-        let styledText = '';
+  </div>
+  <div id="errorMsg"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const textElement = document.getElementById('headLineText');
+      const text = textElement.textContent;
+      let styledText = '';
 
-        // this code will run when the DOM is loaded and will wrap the text in the element with an 
-        // id of 'headLineText' and format each capital letter to be displayed larger than the 
-        // rest of the text
+      // this code will run when the DOM is loaded and will wrap the text in the element with an 
+      // id of 'headLineText' and format each capital letter to be displayed larger than the 
+      // rest of the text
 
-        // loop through text and wrap uppercase letters in a span tag
-        for (let i = 0; i < text.length; i++) {
-          const char = text[i];
-          // check if the character is an uppercase letter
-          if (char === char.toUpperCase() && char !== char.toLowerCase()) {
-            // wrap the character in a span tag with a class of 'larger'
-            styledText += `<span class="larger">${char}</span>`;
-          } else {
-            styledText += char;
-          }
+      // loop through text and wrap uppercase letters in a span tag
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        // check if the character is an uppercase letter
+        if (char === char.toUpperCase() && char !== char.toLowerCase()) {
+          // wrap the character in a span tag with a class of 'larger'
+          styledText += `<span class="larger">${char}</span>`;
+        } else {
+          styledText += char;
         }
-        // change the text in the element
-        textElement.innerHTML = styledText;
-      });
-    </script>
-  </body>
+      }
+      // change the text in the element
+      textElement.innerHTML = styledText;
+    });
+  </script>
+</body>
+
 </html>

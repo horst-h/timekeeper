@@ -213,13 +213,31 @@ function displayWorkDuration() {
 
     // reduce the fraction of the minuteChunks and maxChunks
     // this is only for logging purposes
-    const result = reduceFraction(minuteChunks, maxChunks);
-    console.log(`MinuteChunks: ${minuteChunks} / ${maxChunks} --> ${result.numerator}/${result.denominator}`);
+    const fraction = reduceFraction(minuteChunks, maxChunks);
+    console.log(`MinuteChunks: ${minuteChunks} / ${maxChunks} --> ${fraction.numerator}/${fraction.denominator}`);
+    
+    // update the values in the details section
+    // get formated date and time value
+    let formattedDate = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('detailsTimeValue').textContent = formattedDate;
+    document.getElementById('detailsTime2Go').textContent = timeToGo;
+    document.getElementById('detailsTimeFraction').textContent = `${fraction.numerator}/${fraction.denominator}`;
+    document.getElementById('detailsMinutesPerSegment').textContent = timeChunks + ' Min.';
 
   } catch (error) {
     console.log(error);
     document.getElementById('errorMsg').textContent = error;
   }
+}
+
+// create function to toggle the details section
+function toggleDetails() {
+  const detailsDiv = document.getElementById('details');
+  detailsDiv.classList.toggle('open');
+  console.log('Details visible: ' + detailsDiv.classList.contains('open'));
+
+  // redraw the svg circle to refresh
+  displayWorkDuration();
 }
 
 
@@ -252,11 +270,13 @@ function getFormattedDate() {
 window.onload = init();  // Call the function when the page loads
 
 // global vars in the namespace
-const globals = {
+let globals = {
   // get colors from css variables
   ringBaseColor: getComputedStyle(document.documentElement).getPropertyValue('--ring-base-color').trim() ?? 'lightgrey',
   ringPrimaryColor: getComputedStyle(document.documentElement).getPropertyValue('--ring-primary-color').trim() ?? 'green',
   ringSecondaryColor: getComputedStyle(document.documentElement).getPropertyValue('--ring-secondary-color').trim() ?? 'lightblue',
+  svgRingWith: 200,
+  svgRingHeight: 200
 };
 
 
@@ -270,6 +290,7 @@ function init() {
   
   // get the current date is the actual date if not show the settings menu in the if clause below
   let currentDate = getFormattedDate();
+
   
   // create a new instance of the WorkTime class
   let workTimeCalculator = new WorkTime(currentDate, startTime, null, lunchBreak, workingHours);

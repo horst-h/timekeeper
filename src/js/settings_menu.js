@@ -6,6 +6,12 @@ function openMenu() {
 
     document.getElementById("menu").style.width = "250px";
 
+    // if the details div is open close it
+    const detailsDiv = document.getElementById('details');
+    if (detailsDiv.classList.contains('open')) {
+        toggleDetails();
+    }
+
     // function that calculates the work duaration from number of minutes and returns a string with the format "hh:mm"
     function minutesToTimeString(minutes) {
         const hours = Math.floor(minutes / 60);
