@@ -199,6 +199,7 @@ function displayWorkDuration() {
     // check for overtime
     // console.log('End Time: ' + workTimeCalculator.endTime);
     let overtime = workTimeCalculator.overTime();
+    let overtimeFlag = overtime !== '00:00';
     if (overtime !== '00:00') {
       textBelow = `Overtime: ${overtime}`;
     }
@@ -221,7 +222,9 @@ function displayWorkDuration() {
     let formattedDate = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     document.getElementById('detailsTimeValue').textContent = formattedDate;
     document.getElementById('detailsTime2Go').textContent = timeToGo;
-    document.getElementById('detailsTimeFraction').textContent = `${fraction.numerator}/${fraction.denominator}`;
+
+    let workDayCompletedText = overtimeFlag ? 'overtime' : `${fraction.numerator}/${fraction.denominator}`;
+    document.getElementById('detailsTimeFraction').textContent = workDayCompletedText;
     document.getElementById('detailsMinutesPerSegment').textContent = timeChunks + ' Min.';
 
   } catch (error) {
