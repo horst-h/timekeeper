@@ -202,6 +202,7 @@ button {
     #workTimeContainer {
         flex-direction: column;
         /* Change layout to column when screen width is 600px or less */
+        /* align all items inside the div to center */
         align-items: center;
     }
 }
