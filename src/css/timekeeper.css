@@ -116,7 +116,8 @@ td {
 .hamburger {
     display: inline-block;
     cursor: pointer;
-    padding-right: 15px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .hamburger span {
