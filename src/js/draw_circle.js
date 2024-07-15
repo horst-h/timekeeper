@@ -149,7 +149,7 @@ function createDetailsButton(svgNS, width, height) {
   if (!detailsDiv.classList.contains('open')) {
     // create a small action button in form if a traingle that points to the right on the lower right corner
     detailsButton.setAttribute('id', 'detailsButton');
-    detailsButton.setAttribute('points', `${width - 10},${height - 10} ${width - 20},${height - 10} ${width - 10},${height - 20}`);
+    detailsButton.setAttribute('points', `${width - 10},${height - 10} ${width - 25},${height - 10} ${width - 10},${height - 25}`);
     detailsButton.setAttribute('fill', 'grey');
     detailsButton.setAttribute('onclick', 'toggleDetails()');
     // rotate the button by 45 degrees
