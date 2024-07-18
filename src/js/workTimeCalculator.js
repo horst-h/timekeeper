@@ -8,9 +8,10 @@ class WorkTime {
   }
 
   calculateDuration() {
-    if (!this.startTime) {
-      throw new Error('Error: startTime must not be NULL');
-    }
+  if (!this.startTime) {
+    console.error('Error: startTime must not be NULL');
+    throw new Error('Error: startTime must not be NULL');
+  }
 
     let currentDate = new Date().toISOString().substring(0, 10); // YYYY-MM-DD format
     let adjustedStartTime = new Date(`${currentDate} ${this.startTime}`);
@@ -18,10 +19,10 @@ class WorkTime {
     // console.log(`adjustedEndTime: ${adjustedEndTime}`);
 
     // TODO: eventuell löschen und Pausen nur nach Eingabe des Benutzers berücksichtigen
-    if (this.lunchBreak === null) {
-      let currentHour = new Date().getHours();
-      this.lunchBreak = currentHour < 12 ? 0 : 30;
-    }
+    // if (this.lunchBreak === null) {
+    //   let currentHour = new Date().getHours();
+    //   this.lunchBreak = currentHour < 12 ? 0 : 30;
+    // }
 
     
     
@@ -89,13 +90,6 @@ class WorkTime {
     
     // add the work duration and lunchbreak to the time object
     let endTime = new Date(time.getTime() + this.workDuration * 60000 + (this.lunchBreak ?? 30) * 60000);
-
-    // log start and end-time and lunchbreak 
-    // console.log(`Start-Time: ${this.startTime}`);
-    // console.log(`Lunch-Break: ${this.lunchBreak}`);
-    // console.log(`Work-Duration: ${this.workDuration}`);
-    // console.log(`End-Time: ${endTime}`);
-    // console.log(`End-Time: ${endTime.getHours()}:${time.getMinutes()}`);
 
     // return the end time as a string in the format "HH:MM"
     const resultHours = endTime.getHours().toString().padStart(2, '0');
@@ -267,7 +261,7 @@ function reduceFraction(numerator, denominator) {
   };
 }
 
-// write a function that returns a string with the formated date "YYYY-MM-DD"
+// function that returns a string with the formated date "YYYY-MM-DD"
 function getFormattedDate() {
   return new Date().toISOString().substring(0, 10); // YYYY-MM-DD format
 }
