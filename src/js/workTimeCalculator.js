@@ -237,12 +237,15 @@ function displayWorkDuration() {
 function toggleDetails() {
   const detailsDiv = document.getElementById('details');
   detailsDiv.classList.toggle('open');
+
+  // store the status in the local storage
+  setDetailsStatus(detailsDiv.classList.contains('open') ? 'open' : 'closed');
+
   console.log('Details visible: ' + detailsDiv.classList.contains('open'));
 
   // redraw the svg circle to refresh
   displayWorkDuration();
 }
-
 
 function reduceFraction(numerator, denominator) {
   // Hilfsfunktion, um den größten gemeinsamen Teiler zu finden
@@ -270,8 +273,6 @@ function getFormattedDate() {
 }
 
 
-window.onload = init();  // Call the function when the page loads
-
 // global vars in the namespace
 let globals = {
   // get colors from css variables
@@ -282,6 +283,22 @@ let globals = {
   svgRingHeight: 200
 };
 
+// create a function that is run on load an initializes all global vars
+// this line is executed when the page is loaded
+// do not move above the globals object
+window.onload = init();  // Call the function when the page loads
+
+// setter and getter for the status of the details section
+function setDetailsStatus(status) {
+  localStorage.setItem('detailsStatus', status);
+  // set status in globals object
+  globals.detailsStatus = status;
+}
+
+function getDetailsStatus() {
+  return globals.detailsStatus;
+}
+
 
 // create a function that is run on load an initializes all global vars
 function init() {
@@ -290,6 +307,8 @@ function init() {
   let workingHours = localStorage.getItem('workingHours');
   let lunchBreak = localStorage.getItem('lunchBreak');
   let storedDate = localStorage.getItem('date');
+  // read and set status of the status for the details section from storage
+  globals.detailsStatus = localStorage.getItem('detailsStatus');
   
   // get the current date is the actual date if not show the settings menu in the if clause below
   let currentDate = getFormattedDate();

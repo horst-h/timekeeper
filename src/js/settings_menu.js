@@ -10,6 +10,8 @@ function openMenu() {
     const detailsDiv = document.getElementById('details');
     if (detailsDiv.classList.contains('open')) {
         toggleDetails();
+        // save the state of the details div for later
+        setDetailsStatus('open');
     }
 
     // function that calculates the work duaration from number of minutes and returns a string with the format "hh:mm"
@@ -66,6 +68,10 @@ function closeMenu() {
 
     // update the worktime clock
     displayWorkDuration();    
+    // retore the details section if it was open
+    if (getDetailsStatus() === 'open') {
+        toggleDetails();
+    }
 
     document.getElementById("menu").style.width = "0";
 }
