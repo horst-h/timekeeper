@@ -17,14 +17,6 @@ class WorkTime {
     let adjustedStartTime = new Date(`${currentDate} ${this.startTime}`);
     let adjustedEndTime = this.endTime ? new Date(`${currentDate} ${this.endTime}`) : new Date();
     // console.log(`adjustedEndTime: ${adjustedEndTime}`);
-
-    // TODO: eventuell löschen und Pausen nur nach Eingabe des Benutzers berücksichtigen
-    // if (this.lunchBreak === null) {
-    //   let currentHour = new Date().getHours();
-    //   this.lunchBreak = currentHour < 12 ? 0 : 30;
-    // }
-
-    
     
     let durationInMilliseconds = adjustedEndTime - adjustedStartTime - this.lunchBreak * 60000;
     let finalDuration = new Date(durationInMilliseconds);
@@ -129,6 +121,13 @@ class WorkTime {
     
     return `${formattedHours}:${formattedMinutes}`;
   }
+
+  // function that creates a hour string from workduration minutes integer
+  minutesToTimeString() {
+    const hours = Math.floor(this.workDuration / 60);
+    const remainingMinutes = this.workDuration % 60;
+    return `${hours<10 ? '0':''}${hours}:${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
+  }
 } // end of class WorkTime
 
 // get the minute chunks for the work duration based on the total number of chunks (circle segments)
@@ -215,6 +214,9 @@ function displayWorkDuration() {
     // get formated date and time value
     let formattedDate = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     document.getElementById('detailsTimeValue').textContent = formattedDate;
+
+    // console.log(`Workduration: ${workTimeCalculator.minutesToTimeString()} h`);
+    document.getElementById('detailsWorkingHours').textContent = workTimeCalculator.minutesToTimeString();
     document.getElementById('detailsTime2Go').textContent = timeToGo;
 
     let workDayCompletedText = overtimeFlag ? 'overtime' : `${fraction.numerator}/${fraction.denominator}`;
