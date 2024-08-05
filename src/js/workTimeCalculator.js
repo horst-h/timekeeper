@@ -168,6 +168,10 @@ function displayWorkDuration() {
   // time to work in minutes
   const workDuration = workTimeCalculator.workDuration ?? 480;
   const timeChunks = workDuration / maxChunks;
+  console.log(`One Segment is ${timeChunks.toFixed(2)} Min.`);
+
+  // calculate the time value from the minutes "timeChunks" decimal value as "MM:SS"
+  const timeChunksTimeValue = Math.floor(timeChunks) + ':' + Math.round((timeChunks % 1) * 60).toString().padStart(2, '0'); 
   
   // TODO: clear error message if it is set
   document.getElementById('errorMsg').textContent = '';
@@ -175,8 +179,7 @@ function displayWorkDuration() {
   try {
     let workTime = workTimeCalculator.calculateDuration();
     let minuteChunks = calculateTimeChunks(workTime, timeChunks);
-    console.log(`One Segment is ${timeChunks} Min.`);
-
+    
     // calculate the end time
     let endTime = workTimeCalculator.calculateEndTime();
     // workTimeCalculator.endTime = endTime;
@@ -221,7 +224,7 @@ function displayWorkDuration() {
 
     let workDayCompletedText = overtimeFlag ? 'overtime' : `${fraction.numerator}/${fraction.denominator}`;
     document.getElementById('detailsTimeFraction').textContent = workDayCompletedText;
-    document.getElementById('detailsMinutesPerSegment').textContent = timeChunks + ' Min.';
+    document.getElementById('detailsMinutesPerSegment').textContent = timeChunksTimeValue + ' Min.';
 
   } catch (error) {
     console.log(error);
