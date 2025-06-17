@@ -1,0 +1,209 @@
+/* set the root values fot the ring colors */
+:root {
+    --ring-base-color: lightgrey;
+    --ring-primary-color: green;
+    --ring-secondary-color: lightblue;
+}
+
+.larger {
+    font-size: 150%;
+    /* 150% larger than base text size */
+}
+
+/* set default font for document body to roboto */
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: grey;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 5px;
+}
+
+.headline {
+    /* center all elements vertical and horizontal */
+    display: flex;
+    align-items: center;
+}
+
+#workTimeContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 250px;
+    width: 200px;
+}
+
+/* center everything inside the div workTimeCanvas */
+#workTimeCanvas {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    width: 100%;
+}
+
+/* set top and bottom padding to div with id workTimeCircle */
+#workTimeCircle {
+    padding: 0px 0;
+}
+
+/* Styles for the details table to show more details of the timetracker */
+.detailsLabel {
+    font-size: small;
+    font-weight: normal;
+}
+
+.detailsValue {
+    font-size: small;
+    font-weight: bold;
+}
+
+.closeButton {
+    /* remove all default styles */
+    padding-left: 40px;
+    background: none;
+    color: darkslategrey;
+    border: none;
+}
+
+#details {
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.5s ease;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    padding-left: 30px;
+}
+
+#details.open {
+    width: 200px;
+    /* Hier kannst du die Breite anpassen */
+}
+
+.headingLabel {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    color: darkslategrey;
+    padding-left: 5px;
+    padding-bottom: 0px;
+}
+
+.full-size-p {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    /* Removes default margin */
+    padding: 0;
+    padding-top: 20px;
+}
+
+.close-icon {
+    color: lightgrey;
+}
+
+.hamburger {
+    display: inline-block;
+    cursor: pointer;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: grey;
+    margin: 5px auto;
+    transition: all 0.3s ease;
+}
+
+.menu {
+    height: 300px;
+    width: 0;
+    /* Start width to hide the menu initially */
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    /* set background color to color of body */
+    background-color: white;
+    overflow-x: hidden;
+    transition: 0.5s;
+    /* Animation for sliding in and out */
+    padding-top: 20px;
+    color: white;
+}
+
+.menu input,
+.menu label {
+    display: block;
+    margin: 10px;
+}
+
+.menuHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: darkslategrey;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    text-align: left;
+    color: grey;
+}
+
+.settingHeadline {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+}
+
+.settingHeadline::first-letter {
+    font-size: 150%;
+    /* Macht den ersten Buchstaben doppelt so groß */
+    color: grey;
+}
+
+.settingLabel {
+    color: darkslategrey;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    color: grey;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+#lunchBreak {
+    width: 40px;
+    /* Verkleinert die Breite des Eingabefeldes */
+    height: 20px;
+    /* Verkleinert die Höhe des Eingabefeldes */
+    font-size: 12px;
+    /* Verwendet eine kleinere Schriftgröße */
+    padding: 2px 5px;
+    /* Reduziert das Innenpolster, um das Eingabefeld schlanker zu machen */
+    border: 1px solid #ccc;
+    /* Fügt eine feine Umrandung hinzu, passend zum kleineren Design */
+}
+
+@media (max-width: 500px) {
+    #workTimeContainer {
+        flex-direction: column;
+        /* Change layout to column when screen width is 600px or less */
+        /* align all items inside the div to center */
+        align-items: center;
+    }
+}
