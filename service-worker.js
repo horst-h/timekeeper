@@ -3,13 +3,13 @@ self.addEventListener('install', event => {
     caches.open('v1').then(cache => {
       return cache.addAll([
         '/',
-        '/index.html',
-        '/css/timekeeper.css',
-        '/workTimeCalculator.js',
-        '/settings_menu.js',
-        '/draw_circle.js',
-        '/icons/timekeeper-icon-192.png',
-        '/icons/timekeeper-icon-512.png'
+        'index.html',
+        'css/timekeeper.css',
+        'js/workTimeCalculator.js',
+        'js/settings_menu.js',
+        'js/draw_circle.js',
+        'icons/timekeeper-icon-192.png',
+        'icons/timekeeper-icon-512.png'
       ]);
     })
   );
