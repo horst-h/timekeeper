@@ -7,12 +7,12 @@
   "theme_color": "#317EFB",
   "icons": [
     {
-      "src": "icons\timekeeper-icon-192.png",
+      "src": "icons/timekeeper-icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icons\timekeeper-icon-512.png",
+      "src": "icons/timekeeper-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
