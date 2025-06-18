@@ -1,7 +1,7 @@
 {
   "name": "Timekeeper Timetracking App",
   "short_name": "Timekeeper",
-  "start_url": "/",
+  "start_url": "/timetimetracker/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#F2F2F2",
